@@ -6,7 +6,8 @@ const {
   isWordSolved,
   print,
   randomlySelectWord,
-  askForALetter
+  askForALetter,
+  validateInput
 } = require('./lib');
 
 describe('stringify', () => {
@@ -111,9 +112,9 @@ describe('print', () => {
   });
 });
 
-describe('randomlySelectWord', () => {
-  Math.random = jest.fn();
+xdescribe('randomlySelectWord', () => {
   it('should return the middle word', () => {
+    Math.random = jest.fn();
     Math.random
       .mockReturnValueOnce(0)
       .mockReturnValueOnce(0.5)
@@ -135,5 +136,43 @@ describe('askForALetter', () => {
     readlineSync.question.mockReturnValueOnce('a');
     const result = askForALetter();
     expect(result).toBe('a');
+  });
+});
+
+describe('validateInput', () => {
+  xit('should only return a single letter when a single letter is passed', () => {
+    const result = validateInput('a');
+    expect(result).toBe('a');
+  });
+
+  xit('should return the first character if it receives a string', () => {
+    const result = validateInput('string');
+    expect(result).toBe('s');
+  });
+
+  xit('should throw an error with a message of "Invalid input" if it recieves a number', () => {
+    expect.assertions(2);
+    try {
+      validateInput(2);
+    } catch (err) {
+      expect(err).toBeInstanceOf(Error);
+      expect(err.message).toBe('Invalid input');
+    }
+  });
+
+  xit('should throw an error if it recieves an undefined inputshould throw an error with a message of undefined input', () => {
+    expect(validateInput).toThrow('Invalid input');
+  });
+
+  it.todo('should throw an aerror if it recieves a object');
+
+  it(`should throw an error with a message of "invalid input", if it recieves a character that isn't a letter`, () => {
+    expect(() => {
+      validateInput('2');
+    }).toThrow('Invalid input');
+
+    expect(() => {
+      validateInput('.');
+    }).toThrow('Invalid input');
   });
 });
